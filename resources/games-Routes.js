@@ -5,7 +5,8 @@ router.get('/', (req, res) => {
     db.find()
     .then(games => {
         games.length >= 1 ? res.status(200).json({success: true, games}):
-        res.status(404).json({success: false, message: 'Sorry, no GAMES atm!'})
+        // res.status(404).json({success: false, message: 'Sorry, no GAMES atm!'})
+        res.status(404).json({games})
     })
     .catch(err => {
         res.status(500).json(errorRef(err))

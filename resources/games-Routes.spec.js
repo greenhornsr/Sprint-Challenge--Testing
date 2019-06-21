@@ -76,7 +76,7 @@ describe('**Post and Get GAMES**', () => {
             await db('games').truncate();
         })
 
-        it('responds with 404, a message and success false status if database is empty.', () => {
+        it.skip('responds with 404, a message and success false status if database is empty.', () => {
             return request(server)
             .get(endpoint)
             .then(res => {
@@ -103,13 +103,22 @@ describe('**Post and Get GAMES**', () => {
             .expect('Content-Type', /json/i)
         });
 
-        //  ****STILL NEED TO TEST THIS.  NEED POST ROUTE FIRST****
         it('should respond with an object like gameObj', () => {
             return request(server)
             .get(endpoint)
             .then(res => {
                 const { title = 'string', genre = 'string', releaseYear = 1234 } = res.body
                 expect({title, genre, releaseYear}).toMatchObject(gameObj)
+            })
+        });
+
+        it('should respond with [ ] if no object present', () => {
+            return request(server)
+            .get(endpoint)
+            .then(res => {
+                const expected = []
+                const unexpected = [ 'sioefel', 1, 2]  // failing test var 
+                expect(res).toEqual(expect.arrayContaining(expected))
             })
         });
     });

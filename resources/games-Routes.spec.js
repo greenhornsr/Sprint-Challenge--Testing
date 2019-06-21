@@ -91,9 +91,14 @@ describe('**Post and Get GAMES**', () => {
             return request(server)
             .get(endpoint)
             .then(res => {
-                const expected = []
+                const expected = {
+                    success: 'string',
+                    message: 'string',
+                    games: []
+                }
                 expect(res.status).toBe(404)
-                expect(res.body).toEqual({"message": "Sorry, no GAMES atm!", "success": false, "games:": expected})
+                const { message = 'string', success = '', games = []} = res.body
+                expect({message, success, games}).toMatchObject(expected)
             })
         });
 

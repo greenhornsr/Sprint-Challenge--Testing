@@ -98,7 +98,8 @@ describe('**Post and Get GAMES**', () => {
                 }
                 expect(res.status).toBe(404)
                 const { message = 'string', success = 'string', games = []} = res.body
-                expect({message, success, games}).toMatchObject(expected)            }) 
+                expect({message, success, games}).toMatchObject(expected)            
+            }) 
         });
 
         it('responds with 200 status', async () => {

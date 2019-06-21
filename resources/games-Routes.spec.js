@@ -84,6 +84,19 @@ describe('**Post and Get GAMES**', () => {
                 expect(res.body).toEqual({"message": "Sorry, no GAMES atm!", "success": false})
             })
         });
+
+        it('responds with 200 status', async () => {
+            request(server)
+            .post(endpoint)
+            await add({ title: 'Contra', genre: 'Arcade', releaseYear: 1990})
+
+            await request(server)
+            .get(endpoint)
+            .then(res => {
+                expect(res.status).toBe(200)
+            })
+        })
+
         it('response content-type is json', () => {
             return request(server)
             .get(endpoint)

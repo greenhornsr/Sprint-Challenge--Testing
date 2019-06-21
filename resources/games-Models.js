@@ -7,11 +7,17 @@ module.exports = {
 }
 
 function find(){
-    return db('')
+    return db('games')
 }
 
-function add(){
-    return null
+function add(game){
+    return db('games')
+    .insert(game, 'id')
+    .then(ids => {
+        return db('games')
+        .where({id: ids[0]})
+        .first()
+    })
 }
 
 function remove(){

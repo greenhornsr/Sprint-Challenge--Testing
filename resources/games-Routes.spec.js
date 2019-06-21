@@ -7,6 +7,8 @@ const {add} = require('./games-Models');
 const server = require('../api/server');
 describe('**Post and Get GAMES**', () => {
     describe('POST @ endpoint /games', () => {
+        const endpoint = '/games';
+
         const gameObj = {
             title: 'Pacman', // required
             genre: 'Arcade', // required
@@ -31,6 +33,7 @@ describe('**Post and Get GAMES**', () => {
     
             expect(games).toHaveLength(3)
         });
+
         it('should insert the provided game title', async () => {
             let game = { title: 'Contra', genre: 'Arcade', releaseYear: 1990};
             let added = await add(game);
@@ -60,8 +63,16 @@ describe('**Post and Get GAMES**', () => {
             added = await add(game);
             expect(added.releaseYear).toBe(game.releaseYear)
         });        
-    });
 
+        it('should return a 422 if all object info is not provided', () => {
+            return request(server)
+            .post(endpoint)
+            .then(res => {
+                add({ title: 'Contra', genre: 'Arcade'})
+                expect(res.status).toBe(422)
+            })
+        });        
+    });
 
     describe('GET @ endpoint /games', () => {
         const endpoint = '/games';
@@ -76,12 +87,13 @@ describe('**Post and Get GAMES**', () => {
             await db('games').truncate();
         })
 
-        it.skip('responds with 404, a message and success false status if database is empty.', () => {
+        it('responds with 404, a message and success false status if database is empty.', () => {
             return request(server)
             .get(endpoint)
             .then(res => {
+                const expected = []
                 expect(res.status).toBe(404)
-                expect(res.body).toEqual({"message": "Sorry, no GAMES atm!", "success": false})
+                expect(res.body).toEqual({"message": "Sorry, no GAMES atm!", "success": false, "games:": expected})
             })
         });
 

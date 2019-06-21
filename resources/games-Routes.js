@@ -14,7 +14,21 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-    return null
+    const newGame = req.body
+    const { title, genre, releaseYear } = req.body
+
+    title && genre && releaseYear ?
+    db.add(newGame)
+    .then(count => {
+        const unit = count > 1 ? 'games': 'game';
+        count ? res.status(201).json({success: true, message: `${newGame.description} ${unit} created`, newGame}):
+        res.status(404).json({success: false, message: 'could not add new'})
+    })
+    .catch(err => {
+        res.status(500).json(errorRef(err))
+    })
+    :
+    res.status(422).json({message: 'INCOMPLETE:  Must include title, genre and releaseYear to add to database.'})
 })
 
 // error middleware
